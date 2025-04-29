@@ -1,0 +1,23 @@
+# Backend
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+.pytest_cache/
+
+# Frontend
+frontend/mform-upload/node_modules/
+frontend/mform-upload/.angular/
+frontend/mform-upload/dist/
+frontend/mform-upload/.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db 
