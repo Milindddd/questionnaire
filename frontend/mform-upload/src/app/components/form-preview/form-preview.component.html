@@ -1,0 +1,65 @@
+<div class="form-preview" *ngIf="form">
+  <div class="preview-header">
+    <div class="title-section">
+      <h2>{{ form.title['default'] }}</h2>
+      <span class="version">v{{ form.version }}</span>
+    </div>
+    
+    <button mat-raised-button color="primary" (click)="downloadJson()">
+      <mat-icon>download</mat-icon>
+      Download JSON
+    </button>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="form-content">
+    <div class="group-list">
+      <mat-card *ngFor="let group of form.groups" class="group-card">
+        <mat-card-header (click)="toggleGroup(group.name)" class="group-header">
+          <mat-icon>{{ isGroupExpanded(group.name) ? 'expand_more' : 'chevron_right' }}</mat-icon>
+          <mat-card-title>{{ group.label['default'] }}</mat-card-title>
+          <span class="question-count">{{ group.questions.length }} questions</span>
+        </mat-card-header>
+
+        <mat-card-content *ngIf="isGroupExpanded(group.name)" class="group-content">
+          <div *ngFor="let question of group.questions" class="question-item">
+            <div class="question-header">
+              <mat-icon [matTooltip]="question.type">{{ getQuestionIcon(question.type) }}</mat-icon>
+              <span class="question-label">{{ question.label['default'] }}</span>
+              <mat-chip-list *ngIf="question.required">
+                <mat-chip color="warn" selected>Required</mat-chip>
+              </mat-chip-list>
+            </div>
+
+            <div class="question-details" *ngIf="question.hint || question.constraints || question.choices">
+              <div *ngIf="question.hint" class="hint">
+                <mat-icon>help_outline</mat-icon>
+                <span>{{ question.hint['default'] }}</span>
+              </div>
+
+              <div *ngIf="question.constraints" class="constraint">
+                <mat-icon>rule</mat-icon>
+                <span>{{ question.constraints.message['default'] }}</span>
+              </div>
+
+              <div *ngIf="question.choices" class="choices">
+                <mat-icon>list</mat-icon>
+                <div class="choice-list">
+                  <span *ngFor="let choice of question.choices">
+                    {{ choice.label['default'] }}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<div class="no-form" *ngIf="!form">
+  <mat-icon>upload_file</mat-icon>
+  <p>Upload an XLSForm to see the preview</p>
+</div> 

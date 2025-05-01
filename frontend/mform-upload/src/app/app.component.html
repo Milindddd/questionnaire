@@ -5,8 +5,16 @@
   </header>
 
   <main>
-    <app-file-upload
-      (fileSelected)="onFileSelected($event)">
-    </app-file-upload>
+    <div class="upload-section" [class.with-preview]="parsedForm">
+      <app-file-upload
+        (fileSelected)="onFileSelected($event)">
+      </app-file-upload>
+    </div>
+
+    <div class="preview-section" *ngIf="parsedForm">
+      <app-form-preview
+        [form]="parsedForm">
+      </app-form-preview>
+    </div>
   </main>
 </div> 
