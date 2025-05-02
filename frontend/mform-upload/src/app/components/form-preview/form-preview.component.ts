@@ -1,5 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { FormControl } from '@angular/forms';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 interface Question {
   type: string;
@@ -46,8 +48,69 @@ interface ParsedForm {
 export class FormPreviewComponent {
   @Input() form: ParsedForm | null = null;
   expandedGroups: Set<string> = new Set();
+  searchControl = new FormControl('');
+  typeFilter = new FormControl('all');
+  filteredGroups: FormGroup[] = [];
+  questionTypes: string[] = [];
 
-  constructor(private snackBar: MatSnackBar) {}
+  constructor(private snackBar: MatSnackBar) {
+    this.searchControl.valueChanges
+      .pipe(
+        debounceTime(300),
+        distinctUntilChanged()
+      )
+      .subscribe(() => this.filterGroups());
+
+    this.typeFilter.valueChanges.subscribe(() => this.filterGroups());
+  }
+
+  ngOnChanges(): void {
+    if (this.form) {
+      this.updateQuestionTypes();
+      this.filterGroups();
+    }
+  }
+
+  private updateQuestionTypes(): void {
+    if (!this.form) return;
+
+    const types = new Set<string>();
+    this.form.groups.forEach(group => {
+      group.questions.forEach(question => {
+        types.add(question.type);
+      });
+    });
+    this.questionTypes = Array.from(types).sort();
+  }
+
+  private filterGroups(): void {
+    if (!this.form) return;
+
+    const searchTerm = (this.searchControl.value || '').toLowerCase();
+    const selectedType = this.typeFilter.value;
+
+    this.filteredGroups = this.form.groups.map(group => {
+      const filteredQuestions = group.questions.filter(question => {
+        const matchesSearch = !searchTerm || 
+          question.label['default'].toLowerCase().includes(searchTerm) ||
+          question.name.toLowerCase().includes(searchTerm);
+        
+        const matchesType = selectedType === 'all' || question.type === selectedType;
+
+        return matchesSearch && matchesType;
+      });
+
+      return {
+        ...group,
+        questions: filteredQuestions
+      };
+    }).filter(group => group.questions.length > 0);
+
+    // Auto-expand groups with matching results
+    if (searchTerm || selectedType !== 'all') {
+      this.filteredGroups.forEach(group => this.expandedGroups.add(group.name));
+    }
+  }
 
   toggleGroup(groupName: string): void {
     if (this.expandedGroups.has(groupName)) {
@@ -108,5 +171,10 @@ export class FormPreviewComponent {
       default:
         return 'help_outline';
     }
+  }
+
+  clearFilters(): void {
+    this.searchControl.setValue('');
+    this.typeFilter.setValue('all');
   }
 } 

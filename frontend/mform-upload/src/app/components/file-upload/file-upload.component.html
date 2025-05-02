@@ -2,27 +2,36 @@
   <div
     class="upload-area"
     [class.dragging]="isDragging"
+    [class.loading]="isLoading"
     (dragover)="onDragOver($event)"
     (dragleave)="onDragLeave($event)"
     (drop)="onFileDropped($event)">
     
-    <mat-icon class="upload-icon">cloud_upload</mat-icon>
-    
-    <h3>Drag and drop your Excel file here</h3>
-    <p>or</p>
-    
-    <button mat-raised-button color="primary" (click)="fileInput.click()">
-      Choose File
-    </button>
-    
-    <input
-      #fileInput
-      type="file"
-      hidden
-      accept=".xls,.xlsx"
-      (change)="onFileSelected($event)"
-    >
-    
-    <p class="hint-text">Supported formats: .xls, .xlsx</p>
+    <mat-progress-spinner
+      *ngIf="isLoading"
+      mode="indeterminate"
+      diameter="48">
+    </mat-progress-spinner>
+
+    <ng-container *ngIf="!isLoading">
+      <mat-icon class="upload-icon">cloud_upload</mat-icon>
+      
+      <h3>Drag and drop your Excel file here</h3>
+      <p>or</p>
+      
+      <button mat-raised-button color="primary" (click)="fileInput.click()">
+        Choose File
+      </button>
+      
+      <input
+        #fileInput
+        type="file"
+        hidden
+        accept=".xls,.xlsx"
+        (change)="onFileSelected($event)"
+      >
+      
+      <p class="hint-text">Supported formats: .xls, .xlsx</p>
+    </ng-container>
   </div>
 </div> 

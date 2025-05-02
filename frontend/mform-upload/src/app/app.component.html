@@ -4,9 +4,10 @@
     <p>Upload your Excel-based questionnaires in XLSForm format</p>
   </header>
 
-  <main>
-    <div class="upload-section" [class.with-preview]="parsedForm">
+  <main [class.with-preview]="parsedForm">
+    <div class="upload-section">
       <app-file-upload
+        [isLoading]="isLoading"
         (fileSelected)="onFileSelected($event)">
       </app-file-upload>
     </div>

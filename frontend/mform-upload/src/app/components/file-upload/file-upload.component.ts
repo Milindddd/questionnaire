@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class FileUploadComponent {
   @Output() fileSelected = new EventEmitter<File>();
+  @Input() isLoading = false;
   isDragging = false;
   
   constructor(private snackBar: MatSnackBar) {}
@@ -32,6 +33,10 @@ export class FileUploadComponent {
   }
 
   handleFile(file: File) {
+    if (this.isLoading) {
+      return;
+    }
+
     if (this.isValidFile(file)) {
       this.fileSelected.emit(file);
     } else {
@@ -51,7 +56,9 @@ export class FileUploadComponent {
 
   onDragOver(event: DragEvent) {
     event.preventDefault();
-    this.isDragging = true;
+    if (!this.isLoading) {
+      this.isDragging = true;
+    }
   }
 
   onDragLeave(event: DragEvent) {

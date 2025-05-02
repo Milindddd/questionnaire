@@ -34,6 +34,7 @@ interface ParsedForm {
 })
 export class AppComponent {
   parsedForm: ParsedForm | null = null;
+  isLoading = false;
 
   constructor(
     private fileService: FileService,
@@ -41,17 +42,22 @@ export class AppComponent {
   ) {}
 
   onFileSelected(file: File) {
+    this.isLoading = true;
+    this.parsedForm = null;
+
     this.fileService.validateFile(file).subscribe({
       next: (response) => {
         if (response.valid) {
           this.uploadFile(file);
         } else {
+          this.isLoading = false;
           this.snackBar.open('Invalid file format. Please check the file structure.', 'Close', {
             duration: 5000
           });
         }
       },
       error: (error) => {
+        this.isLoading = false;
         this.snackBar.open('Error validating file. Please try again.', 'Close', {
           duration: 5000
         });
@@ -63,11 +69,13 @@ export class AppComponent {
     this.fileService.uploadFile(file).subscribe({
       next: (response: ParsedForm) => {
         this.parsedForm = response;
+        this.isLoading = false;
         this.snackBar.open('Form uploaded and parsed successfully!', 'Close', {
           duration: 3000
         });
       },
       error: (error) => {
+        this.isLoading = false;
         this.snackBar.open('Error uploading file. Please try again.', 'Close', {
           duration: 5000
         });

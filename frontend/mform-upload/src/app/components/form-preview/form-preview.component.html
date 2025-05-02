@@ -13,9 +13,38 @@
 
   <mat-divider></mat-divider>
 
+  <div class="search-filters">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>Search questions</mat-label>
+      <input matInput [formControl]="searchControl" placeholder="Type to search...">
+      <mat-icon matPrefix>search</mat-icon>
+      <button mat-icon-button matSuffix *ngIf="searchControl.value"
+              (click)="searchControl.setValue('')">
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="type-filter">
+      <mat-label>Question type</mat-label>
+      <mat-select [formControl]="typeFilter">
+        <mat-option value="all">All types</mat-option>
+        <mat-option *ngFor="let type of questionTypes" [value]="type">
+          {{ type }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-stroked-button 
+            *ngIf="searchControl.value || typeFilter.value !== 'all'"
+            (click)="clearFilters()">
+      <mat-icon>clear_all</mat-icon>
+      Clear filters
+    </button>
+  </div>
+
   <div class="form-content">
     <div class="group-list">
-      <mat-card *ngFor="let group of form.groups" class="group-card">
+      <mat-card *ngFor="let group of filteredGroups" class="group-card">
         <mat-card-header (click)="toggleGroup(group.name)" class="group-header">
           <mat-icon>{{ isGroupExpanded(group.name) ? 'expand_more' : 'chevron_right' }}</mat-icon>
           <mat-card-title>{{ group.label['default'] }}</mat-card-title>
@@ -55,6 +84,11 @@
           </div>
         </mat-card-content>
       </mat-card>
+
+      <div class="no-results" *ngIf="filteredGroups.length === 0">
+        <mat-icon>search_off</mat-icon>
+        <p>No questions match your search criteria</p>
+      </div>
     </div>
   </div>
 </div>
