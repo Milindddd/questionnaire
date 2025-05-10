@@ -1,7 +1,8 @@
 from fastapi import FastAPI, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from .services.xlsform_parser import XLSFormParser
-from .models.form import FormValidation, ParsedForm
+import uvicorn
+from services.xlsform_parser import XLSFormParser
+from models.form import FormValidation, ParsedForm
 import logging
 
 # Configure logging

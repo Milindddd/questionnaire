@@ -2,7 +2,7 @@ import pandas as pd
 from fastapi import UploadFile
 from typing import Dict, List, Any, Optional
 import uuid
-from ..models.form import ParsedForm, FormGroup, Question
+from models.form import ParsedForm, FormGroup, Question
 import logging
 
 logger = logging.getLogger(__name__)
