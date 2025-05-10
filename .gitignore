@@ -20,4 +20,8 @@ frontend/mform-upload/.env
 
 # OS
 .DS_Store
-Thumbs.db 
+Thumbs.db
+
+# Virtual Environment
+.venv/
+env/ 
