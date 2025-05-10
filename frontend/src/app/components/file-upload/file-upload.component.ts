@@ -17,20 +17,22 @@ import { FormValidation, ParsedForm } from '../../models/form.model';
         </div>
       </div>
       
-      <div *ngIf="validationResult" class="result-section">
-        <div class="validation-result" [class.valid]="validationResult.valid" [class.invalid]="!validationResult.valid">
-          <h3>Validation Result</h3>
-          <p>Status: {{ validationResult.valid ? 'Valid' : 'Invalid' }}</p>
-          <p>Message: {{ validationResult.message }}</p>
+      <div class="results-container">
+        <div *ngIf="validationResult" class="result-section">
+          <div class="validation-result" [class.valid]="validationResult.valid" [class.invalid]="!validationResult.valid">
+            <h3>Validation Result</h3>
+            <p>Status: {{ validationResult.valid ? 'Valid' : 'Invalid' }}</p>
+            <p>Message: {{ validationResult.message }}</p>
+          </div>
         </div>
-      </div>
 
-      <div *ngIf="parsedForm" class="result-section">
-        <div class="form-details">
-          <h3>Form Details</h3>
-          <p><strong>Title:</strong> {{ parsedForm.title.default }}</p>
-          <p><strong>Version:</strong> {{ parsedForm.version }}</p>
-          <p><strong>Number of Groups:</strong> {{ parsedForm.groups.length }}</p>
+        <div *ngIf="parsedForm" class="result-section">
+          <div class="form-details">
+            <h3>Form Details</h3>
+            <p><strong>Title:</strong> {{ parsedForm.title.default }}</p>
+            <p><strong>Version:</strong> {{ parsedForm.version }}</p>
+            <p><strong>Number of Groups:</strong> {{ parsedForm.groups.length }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -42,6 +44,9 @@ import { FormValidation, ParsedForm } from '../../models/form.model';
       padding: 2rem;
       margin: 2rem 0;
       color: white;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
     }
 
     .upload-section {
@@ -88,14 +93,21 @@ import { FormValidation, ParsedForm } from '../../models/form.model';
       color: white;
     }
 
+    .results-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
     .result-section {
-      margin-top: 2rem;
+      width: 100%;
     }
 
     .validation-result, .form-details {
       background: rgba(255, 255, 255, 0.05);
-      padding: 1rem;
+      padding: 1.5rem;
       border-radius: 4px;
+      width: 100%;
     }
 
     .validation-result.valid {
@@ -109,11 +121,17 @@ import { FormValidation, ParsedForm } from '../../models/form.model';
     h3 {
       margin: 0 0 1rem 0;
       color: rgba(255, 255, 255, 0.9);
+      font-size: 1.2rem;
     }
 
     p {
       margin: 0.5rem 0;
       color: rgba(255, 255, 255, 0.7);
+      line-height: 1.5;
+    }
+
+    strong {
+      color: rgba(255, 255, 255, 0.9);
     }
   `]
 })
