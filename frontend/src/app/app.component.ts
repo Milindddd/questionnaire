@@ -7,6 +7,7 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { SearchComponent } from './components/search/search.component';
 import { UploadComponent } from './components/upload/upload.component';
 import { DownloadComponent } from './components/download/download.component';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 
 @Component({
   selector: 'app-root',
@@ -19,7 +20,8 @@ import { DownloadComponent } from './components/download/download.component';
     NavbarComponent,
     SearchComponent,
     UploadComponent,
-    DownloadComponent
+    DownloadComponent,
+    FileUploadComponent
   ],
   template: `
     <div class="app-container">
@@ -30,6 +32,7 @@ import { DownloadComponent } from './components/download/download.component';
           <app-upload></app-upload>
           <app-download></app-download>
         </div>
+        <app-file-upload></app-file-upload>
         <router-outlet></router-outlet>
       </main>
     </div>
